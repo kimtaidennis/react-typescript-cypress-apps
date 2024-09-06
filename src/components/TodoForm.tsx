@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { StateDispatchContext } from '../context/all.context'
+import { Actions } from '../reducer/types'
 
-type Props = {
-    onAdd: (str:string) => void
-}
-
-const TodoForm = ({ onAdd} :Props) => {
+const TodoForm = () => {
     const[ value, setValue] = useState('')
+    const dispatch = useContext(StateDispatchContext)
     
     const _addTodo = () => {
-        onAdd(value)
+        if(dispatch) {
+            dispatch({ type: Actions.ADD_TODO, payload: value})
+        }
         setValue('')
     }
     return (

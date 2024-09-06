@@ -1,4 +1,4 @@
-import { Actions, ActionType, State } from "./types"
+import { Actions, ActionType, State, Todo } from "./types"
 
 export const reducer = (state: State,action: ActionType): State => {
     switch (action.type) {
@@ -6,6 +6,33 @@ export const reducer = (state: State,action: ActionType): State => {
             return {
                 ...state,
                 posts: action.payload
+            }
+        case Actions.ADD_TODO:
+            let obj:Todo = {
+                id: state.todos.length + 1,
+                name: action.payload,
+                complete: false
+              }
+            return {
+                ...state,
+                todos: [...state.todos,obj]
+            }
+        case Actions.REMOVE_TODO:
+            return {
+                ...state,
+                todos: state.todos.filter( (todo) => todo.id !== action.payload)
+            }
+        case Actions.COMPLETE_TODO:
+            const updatedTodos = state.todos.map((todo) => {
+                if(todo.id == action.payload.id) {
+                  return { ...todo, complete: action.payload.checked }
+                } else {
+                  return todo
+                }
+            })
+            return {
+                ...state,
+                todos: updatedTodos
             }
         case Actions.SORT_POSTS: 
             const _posts = [...state.posts]
